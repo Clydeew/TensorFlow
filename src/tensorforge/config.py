@@ -9,6 +9,7 @@ import yaml
 
 from .data import read_frame, resolve
 from .errors import WorkbenchError
+from .languages import validate_language
 from .registry import TASKS
 
 
@@ -58,6 +59,10 @@ def validate(cfg, root, *, require_approval=True, experimental=False):
 def _validate(cfg, root, *, require_approval, experimental):
     if cfg.get("schema_version") != 1:
         raise WorkbenchError("SCHEMA_VERSION", "schema_version must be 1")
+    try:
+        validate_language(cfg.get("language", {}))
+    except ValueError as e:
+        raise WorkbenchError("INVALID_LANGUAGE_CONFIG", str(e)) from e
     task = TASKS.get(cfg.get("task"))
     if not task:
         raise WorkbenchError("UNKNOWN_TASK", "Run tensorforge list-tasks for valid IDs")
@@ -326,6 +331,14 @@ def _validate(cfg, root, *, require_approval, experimental):
                     "MISSING_COLUMN", "OCR evaluation requires columns.target in the test manifest"
                 )
         if task.backend in ("vision", "diffusion", "clip"):
+            language = cfg.get("language", {})
+            if language.get("primary", "en") != "en" or language.get("additional"):
+                warnings.append(
+                    warn(
+                        "MODEL_LANGUAGE_UNVERIFIED",
+                        "Verify local model language/script coverage with language-specific fixtures; Unicode input support is not proof of language competence",
+                    )
+                )
             model = cfg.get("params", {}).get("model_path")
             if not model or not resolve(root, model).is_dir():
                 raise WorkbenchError(

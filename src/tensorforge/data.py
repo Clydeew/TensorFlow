@@ -108,5 +108,12 @@ def propose(profile):
         "seed": 42,
         "split": {"strategy": "stratified" if target else "none", "test_size": 0.25},
         "params": {},
+        "language": {
+            "primary": "und",
+            "additional": [],
+            "script": "Latn",
+            "normalization": "NFC",
+            "code_switching": False,
+        },
         "review": {"approved": False, "acknowledged_warnings": []},
     }

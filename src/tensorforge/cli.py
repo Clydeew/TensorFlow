@@ -13,6 +13,7 @@ from .config import load_config, validate
 from .data import profile_file, propose
 from .errors import WorkbenchError
 from .generator import generate, verify
+from .languages import PRESETS
 from .registry import TASKS, catalog
 
 
@@ -43,13 +44,16 @@ def doctor():
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        prog="tensorforge", description="TensorFlow offline baseline workbench (independent project)"
+        prog="tensorflow-workbench",
+        description="TensorFlow offline baseline workbench (independent project)",
     )
     parser.add_argument("--version", action="version", version=__version__)
     sub = parser.add_subparsers(dest="command", required=True)
     ls = sub.add_parser("list-tasks", help="Show verified, experimental and planned coverage")
     ls.add_argument("--json", action="store_true")
     sub.add_parser("doctor", help="Check local dependency availability")
+    languages = sub.add_parser("languages", help="Dataset language metadata and OCR codes")
+    languages.add_argument("--json", action="store_true")
     inspect = sub.add_parser("inspect", help="Bounded manifest profile and unapproved configuration draft")
     inspect.add_argument("data")
     inspect.add_argument("--output", default="runs/inspection")
@@ -70,6 +74,18 @@ def main(argv=None):
     ui.add_argument("--port", type=int, default=8501)
     args = parser.parse_args(argv)
     try:
+        if args.command == "languages":
+            if args.json:
+                print(json.dumps(PRESETS, indent=2, ensure_ascii=False))
+            else:
+                for tag, info in PRESETS.items():
+                    print(
+                        f"{tag:5} {info['name']:32} OCR: {info['ocr'] or 'unavailable'} | {', '.join(info['scripts'])}"
+                    )
+                print(
+                    "Custom language tags are accepted. OCR codes do not imply support for every native script."
+                )
+            return 0
         if args.command == "list-tasks":
             if args.json:
                 print(json.dumps(catalog(), indent=2))

@@ -21,3 +21,9 @@ submission:
   sample: examples/data/sample_submission.csv
   id_column: id
   prediction_column: label
+language:
+  primary: en
+  additional: []
+  script: Latn
+  normalization: NFC
+  code_switching: false

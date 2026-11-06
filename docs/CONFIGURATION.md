@@ -12,6 +12,8 @@ Start with a YAML under examples/. All mappings use `schema_version: 1`. `projec
 - `review`: set `approved: true` only after reviewing the task, metric, split, assets and output contract. `acknowledged_warnings` contains exact stable IDs reported by validate. A sampled schema check is not full-data acceptance; execution revalidates records.
 - `submission`: optional `sample`, `id_column`, `prediction_column`. Only two-column scalar/text submissions are supported. IDs must match, remain unique and preserve sample order. Generic predictions are always retained. Ranking/image manifests require their own serializers and cannot use this mapping.
 
+See [language configuration](LANGUAGES.md) for explicit Indonesian/English/regional-language metadata and Unicode normalization.
+
 ## Task parameters
 
 Classification/regression use character TF-IDF (2–5 grams, up to 30000 features) with a fixed LogisticRegression/Ridge baseline. Only trusted templates generate code; arbitrary Python callbacks/import strings are not supported.

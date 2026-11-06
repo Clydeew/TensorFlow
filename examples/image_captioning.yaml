@@ -21,3 +21,9 @@ review:
   acknowledged_warnings:
   - EXPERIMENTAL_BACKEND
   - NO_SUBMISSION_SPEC
+language:
+  primary: en
+  additional: []
+  script: Latn
+  normalization: NFC
+  code_switching: false

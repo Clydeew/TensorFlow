@@ -1,0 +1,30 @@
+schema_version: 1
+project_root: ..
+task: text_classification
+data:
+  train: examples/data/indonesia_train.csv
+  test: examples/data/indonesia_test.csv
+columns:
+  id: id
+  text: text
+  target: label
+metric: macro_f1
+seed: 42
+split:
+  strategy: stratified
+  test_size: 0.25
+params: {}
+review:
+  approved: true
+  acknowledged_warnings:
+  - NO_SUBMISSION_SPEC
+language:
+  primary: id
+  additional:
+  - en
+  - jv
+  - su
+  script: Latn
+  normalization: NFC
+  code_switching: true
+  preserve_case: false

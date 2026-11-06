@@ -3,6 +3,7 @@
 import json
 import math
 import os
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -85,7 +86,12 @@ def strings(frame, key="text"):
     check(col in frame, f"Missing {key} column")
     check(not frame[col].isna().any(), f"Null {key} values")
     check(frame[col].map(lambda x: isinstance(x, str)).all(), f"{key} must contain strings")
-    return frame[col].tolist()
+    return [normalize_text(text) for text in frame[col]]
+
+
+def normalize_text(text):
+    form = CONFIG.get("language", {}).get("normalization", "NFC")
+    return unicodedata.normalize(form, text) if form != "none" else text
 
 
 def ids(frame):
@@ -139,7 +145,14 @@ def split_indices(frame):
 
 
 def vectorizer():
-    return TfidfVectorizer(analyzer="char", ngram_range=(2, 5), max_features=30_000, sublinear_tf=True)
+    return TfidfVectorizer(
+        analyzer="char",
+        ngram_range=(2, 5),
+        max_features=30_000,
+        sublinear_tf=True,
+        lowercase=not CONFIG.get("language", {}).get("preserve_case", False),
+        strip_accents=None,
+    )
 
 
 def numeric(y):
@@ -176,6 +189,8 @@ def edit_distance(a, b):
 
 
 def text_error(refs, preds, words=False):
+    refs = [normalize_text(value) for value in refs]
+    preds = [normalize_text(value) for value in preds]
     pairs = [(a.split(), b.split()) if words else (a, b) for a, b in zip(refs, preds, strict=True)]
     denominator = sum(len(a) for a, _ in pairs)
     check(denominator > 0, "CER/WER undefined for empty reference corpus")

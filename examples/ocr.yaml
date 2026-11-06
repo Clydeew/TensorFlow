@@ -14,10 +14,19 @@ split:
   strategy: random
   test_size: 0.25
 params:
-  language: eng
+  language: ind+eng+jav+sun
   tessdata_path: models/tesseract
 review:
   approved: false
   acknowledged_warnings:
   - EXPERIMENTAL_BACKEND
   - NO_SUBMISSION_SPEC
+language:
+  primary: id
+  additional:
+  - en
+  - jv
+  - su
+  script: Latn
+  normalization: NFC
+  code_switching: true

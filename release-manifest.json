@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
   "requirements_baseline": "SRS 1.2",
-  "template_sha256": "8ab2c90fb6ae1e3f3b6b9c0979b28b1393a425bc27194887ba40361a50ff38f0",
+  "template_sha256": "30e3aaa22ef5d94b62bd987a95cea1bea5df7308c4e4eb89bdd62842476632bd",
   "tasks": [
     {
       "id": "text_classification",
@@ -556,5 +556,30 @@
     "GPU model execution",
     "Docker daemon/image execution",
     "Full SRS scenario implementation"
+  ],
+  "language_support": {
+    "ui": [
+      "en"
+    ],
+    "unicode_input": true,
+    "mixed_fixture": [
+      "id",
+      "en",
+      "jv",
+      "su"
+    ],
+    "ocr_assets": [
+      "eng",
+      "ind",
+      "jav",
+      "sun"
+    ],
+    "native_script_ocr_verified": false
+  },
+  "platform_launchers": [
+    "Linux bash",
+    "macOS bash",
+    "Windows PowerShell",
+    "Windows cmd"
   ]
 }

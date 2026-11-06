@@ -1,2 +1,2 @@
 id,image,prompt,question
-local-image-1,models/example.png,A quiet garden at sunrise,What is in the image?
+local-image-1,examples/data/ocr_sample.png,A quiet garden at sunrise,What is in the image?

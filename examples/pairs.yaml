@@ -20,3 +20,9 @@ review:
   acknowledged_warnings:
   - PAIR_GROUP_LEAKAGE
   - NO_SUBMISSION_SPEC
+language:
+  primary: en
+  additional: []
+  script: Latn
+  normalization: NFC
+  code_switching: false

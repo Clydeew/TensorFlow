@@ -1,0 +1,51 @@
+id,text,label,language
+id-olahraga-00,Tim sepak bola meraih kemenangan di stadion,olahraga,id
+id-olahraga-01,Pemain bulu tangkis berlatih untuk turnamen,olahraga,id
+id-olahraga-02,Pelatih menyusun strategi pertandingan,olahraga,id
+id-olahraga-03,Atlet renang memenangkan medali emas,olahraga,id
+id-olahraga-04,Penonton mendukung klub dalam final,olahraga,id
+id-olahraga-05,Olahraga bola basket digelar sore ini,olahraga,id
+en-olahraga-00,The football team celebrates a goal,olahraga,en
+en-olahraga-01,A tennis player wins the tournament,olahraga,en
+en-olahraga-02,The coach prepares the match strategy,olahraga,en
+en-olahraga-03,Swimming athletes compete in the pool,olahraga,en
+en-olahraga-04,Fans support the basketball club,olahraga,en
+en-olahraga-05,A sports champion receives a medal,olahraga,en
+jv-olahraga-00,Tim bal-balan menang ing stadion,olahraga,jv
+jv-olahraga-01,Pemain bulu tangkis gladhen kanggo tandhing,olahraga,jv
+jv-olahraga-02,Pelatih nyiapake strategi pertandingan,olahraga,jv
+jv-olahraga-03,Atlet nglangi menang medhali emas,olahraga,jv
+jv-olahraga-04,Para penonton ndhukung klub bal-balan,olahraga,jv
+jv-olahraga-05,Bocah-bocah dolanan bal basket,olahraga,jv
+su-olahraga-00,Tim maén bal meunang di stadion,olahraga,su
+su-olahraga-01,Pamaén bulu tangkis latihan pikeun turnamén,olahraga,su
+su-olahraga-02,Palatih nyiapkeun strategi pertandingan,olahraga,su
+su-olahraga-03,Atlét ngojay meunang medali emas,olahraga,su
+su-olahraga-04,Panongton ngarojong klub maén bal,olahraga,su
+su-olahraga-05,Barudak maén baskét di lapang,olahraga,su
+id-teknologi-00,Pengembang merilis perangkat lunak komputer,teknologi,id
+id-teknologi-01,Server menyimpan basis data aplikasi,teknologi,id
+id-teknologi-02,Programmer memperbaiki kode dan jaringan,teknologi,id
+id-teknologi-03,Teknologi kecerdasan buatan memproses data,teknologi,id
+id-teknologi-04,Prosesor baru meningkatkan kinerja sistem,teknologi,id
+id-teknologi-05,Aplikasi ponsel mendapat pembaruan keamanan,teknologi,id
+en-teknologi-00,A developer releases new computer software,teknologi,en
+en-teknologi-01,The server stores an application database,teknologi,en
+en-teknologi-02,A programmer fixes network code,teknologi,en
+en-teknologi-03,Artificial intelligence processes digital data,teknologi,en
+en-teknologi-04,A new processor improves system performance,teknologi,en
+en-teknologi-05,The mobile application receives a security update,teknologi,en
+jv-teknologi-00,Pangembang ngrilis piranti lunak komputer,teknologi,jv
+jv-teknologi-01,Server komputer nyimpen basis data aplikasi anyar,teknologi,jv
+jv-teknologi-02,Programmer ndandani kode lan jaringan,teknologi,jv
+jv-teknologi-03,Teknologi komputer ngolah data digital,teknologi,jv
+jv-teknologi-04,Prosesor anyar ningkatake kinerja sistem,teknologi,jv
+jv-teknologi-05,Aplikasi ponsel entuk nganyari keamanan,teknologi,jv
+su-teknologi-00,Pamekar ngarilis parangkat lunak komputer,teknologi,su
+su-teknologi-01,Server nyimpen basis data aplikasi,teknologi,su
+su-teknologi-02,Programmer ngalereskeun kode jeung jaringan,teknologi,su
+su-teknologi-03,Téknologi komputer ngolah data digital,teknologi,su
+su-teknologi-04,Prosesor anyar ningkatkeun kinerja sistem,teknologi,su
+su-teknologi-05,Aplikasi telepon meunang apdet kaamanan,teknologi,su
+mix-olahraga,"Tim kita wins the football final, apik tenan!",olahraga,id-en-jv
+mix-teknologi,"Aplikasi iki updates the database, jadi luwih cepet",teknologi,id-en-jv

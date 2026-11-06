@@ -4,6 +4,12 @@ An independent offline workbench for creating baseline notebooks from text and m
 
 TensorFlow inspects a local dataset, validates a human-reviewed task configuration, and generates a standalone editable Jupyter notebook. Generating a notebook never trains, evaluates, runs OCR, downloads models or writes predictions. Notebook execution is an explicit separate action.
 
+## Language and operating system support
+
+The interface and CLI use English. Dataset language is independent: character baselines preserve Unicode and accept Indonesian/English/Javanese/Sundanese and code-switched text, with explicit language/script configuration and a runnable `examples/indonesia.yaml`. Regional-language input support is separate from pretrained model/OCR/font competence. See [language contracts](docs/LANGUAGES.md).
+
+Separate setup scripts are provided for Linux (`setup-linux.sh`), macOS (`setup-macos.sh`) and Windows (`setup-windows.ps1` / `setup-windows.cmd`). Each installs the same **tensorflow-workbench** CLI; root `.sh`, `.cmd` and `.ps1` launchers work without environment activation. See [OS setup and CLI](docs/SETUP.md).
+
 ## Quick start
 
 If uv is not already installed, the portable bootstrap keeps its tools inside the project:

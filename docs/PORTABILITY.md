@@ -28,7 +28,7 @@ OCR additionally requires the **Tesseract executable and selected trained langua
 - macOS with Homebrew: `brew install tesseract tesseract-lang`.
 - Windows: install a Tesseract distribution and add its executable folder to PATH. Confirm `tesseract --version` and `tesseract --list-langs` before use.
 
-For a project-local alternative to system language packages, run `python scripts/stage_ocr.py` explicitly while online. It downloads pinned English/Indonesian data from the official tessdata_fast repository, verifies SHA-256 hashes, and records provenance under ignored `models/tesseract/`. Set `params.tessdata_path: models/tesseract` (as in examples/ocr.yaml), then copy that folder separately for offline use. The Tesseract executable is still required.
+For a project-local alternative to system language packages, run `python scripts/stage_ocr.py` explicitly while online. It downloads pinned English/Indonesian/Javanese/Sundanese data from the official tessdata_fast repository, verifies SHA-256 hashes, and records provenance under ignored `models/tesseract/`. Set `params.tessdata_path: models/tesseract` (as in examples/ocr.yaml), then copy that folder separately for offline use. The Tesseract executable is still required.
 
 The Docker image includes English/Indonesian Tesseract and document extras. `pypdfium2` supplies its rendering library with the platform wheel. Unsupported platform wheels may require additional native setup. DOCX extraction currently concatenates paragraphs and table text; original interleaving, coordinates and layout are not preserved. The OCR template does whole-page OCR; it is not a layout/table/handwriting recognition adapter. These templates remain experimental until tested with actual local assets.
 
