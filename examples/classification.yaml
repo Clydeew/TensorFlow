@@ -1,0 +1,23 @@
+schema_version: 1
+project_root: ..
+task: text_classification
+data:
+  train: examples/data/train.csv
+  test: examples/data/test.csv
+columns:
+  id: id
+  text: text
+  target: label
+metric: macro_f1
+seed: 42
+split:
+  strategy: stratified
+  test_size: 0.25
+params: {}
+review:
+  approved: true
+  acknowledged_warnings: []
+submission:
+  sample: examples/data/sample_submission.csv
+  id_column: id
+  prediction_column: label

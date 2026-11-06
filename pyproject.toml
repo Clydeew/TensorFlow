@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling==1.29.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tensorforge-workbench"
+version = "0.1.0"
+description = "TensorFlow: offline assisted baseline notebook generator for text and multimodal competitions"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "numpy>=2.2,<3", "pandas>=2.2,<3", "scikit-learn>=1.6,<2",
+  "scipy>=1.15,<2", "PyYAML>=6.0.2,<7", "nbformat>=5.10,<6",
+  "nbclient>=0.10,<1", "ipykernel>=6.29,<8", "Pillow>=11,<13",
+  "pyarrow>=19,<24", "streamlit>=1.45,<2",
+]
+
+[project.optional-dependencies]
+ocr = ["pytesseract>=0.3.13,<0.4", "pypdf>=5,<7", "pypdfium2>=4.30,<6", "python-docx>=1.1,<2", "beautifulsoup4>=4.13,<5"]
+vision = ["torch>=2.6,<3", "torchvision>=0.21,<1", "transformers>=4.49,<5", "diffusers>=0.32,<1", "accelerate>=1.3,<2", "safetensors>=0.5,<1", "sentencepiece>=0.2,<1"]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<10", "ruff>=0.11,<1", "build>=1.2,<2"]
+
+[project.scripts]
+tensorforge = "tensorforge.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tensorforge"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Offline/thread policy must be set before importing numerical backends.
+"src/tensorforge/templates/runtime.py" = ["E402"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]

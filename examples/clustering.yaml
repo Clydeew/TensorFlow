@@ -1,0 +1,22 @@
+schema_version: 1
+project_root: ..
+task: clustering
+data:
+  train: examples/data/train.csv
+  test: examples/data/test.csv
+columns:
+  id: id
+  text: text
+  target: label
+metric: none
+seed: 42
+split:
+  strategy: none
+  test_size: 0.25
+params:
+  n_clusters: 2
+review:
+  approved: true
+  acknowledged_warnings:
+  - RANDOM_SPLIT
+  - NO_SUBMISSION_SPEC

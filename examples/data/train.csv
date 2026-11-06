@@ -1,0 +1,25 @@
+id,text,label,group
+sport-0,football sport news update number 0,sport,sport-0
+sport-1,tennis sport news update number 1,sport,sport-1
+sport-2,soccer sport news update number 2,sport,sport-2
+sport-3,stadium sport news update number 3,sport,sport-3
+sport-4,player sport news update number 4,sport,sport-4
+sport-5,champion sport news update number 5,sport,sport-5
+sport-6,basketball sport news update number 6,sport,sport-6
+sport-7,athlete sport news update number 7,sport,sport-7
+sport-8,team sport news update number 8,sport,sport-8
+sport-9,tournament sport news update number 9,sport,sport-9
+sport-10,coach sport news update number 10,sport,sport-10
+sport-11,goal sport news update number 11,sport,sport-11
+tech-0,computer tech news update number 0,tech,tech-0
+tech-1,software tech news update number 1,tech,tech-1
+tech-2,processor tech news update number 2,tech,tech-2
+tech-3,database tech news update number 3,tech,tech-3
+tech-4,algorithm tech news update number 4,tech,tech-4
+tech-5,program tech news update number 5,tech,tech-5
+tech-6,server tech news update number 6,tech,tech-6
+tech-7,network tech news update number 7,tech,tech-7
+tech-8,keyboard tech news update number 8,tech,tech-8
+tech-9,memory tech news update number 9,tech,tech-9
+tech-10,chip tech news update number 10,tech,tech-10
+tech-11,robot tech news update number 11,tech,tech-11

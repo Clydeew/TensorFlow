@@ -1,0 +1,22 @@
+schema_version: 1
+project_root: ..
+task: text_pair
+data:
+  train: examples/data/pairs.csv
+  test: examples/data/pair_test.csv
+columns:
+  id: id
+  text: text
+  target: label
+  text_b: other
+metric: accuracy
+seed: 42
+split:
+  strategy: stratified
+  test_size: 0.25
+params: {}
+review:
+  approved: true
+  acknowledged_warnings:
+  - PAIR_GROUP_LEAKAGE
+  - NO_SUBMISSION_SPEC

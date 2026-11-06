@@ -1,0 +1,21 @@
+schema_version: 1
+project_root: ..
+task: token_classification
+data:
+  train: examples/data/ner_train.jsonl
+  test: examples/data/ner_test.jsonl
+columns:
+  id: id
+  tokens: tokens
+  tags: tags
+metric: entity_f1
+seed: 42
+split:
+  strategy: random
+  test_size: 0.25
+params: {}
+review:
+  approved: true
+  acknowledged_warnings:
+  - RANDOM_SPLIT
+  - NO_SUBMISSION_SPEC

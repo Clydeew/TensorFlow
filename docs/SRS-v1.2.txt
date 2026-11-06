@@ -1,0 +1,380 @@
+Software Requirements Specification (SRS)
+GEMNLP Offline Assisted Text and Multimodal Baseline Notebook Generator
+Document ID: SRS-GEMNLP-001
+Version: 1.2 (expanded text and multimodal scenario scope; subject to acceptance tests)
+Date: 2026-11-06
+Status: Scope revised for technical design; adapter implementation and verification pending; competition-use authorization outstanding
+Stakeholders: Competition participant/experimenter (primary), team reviewer/presenter, maintainers, competition organizer (external constraint authority).
+1. Purpose, product goals, and decisions
+Problem: In time-limited competitions involving text-based data, teams repeatedly spend scarce time identifying dataset contracts, checking label/format issues, establishing defensible validation, implementing baseline models, and producing valid predictions. The tool reduces this setup cost without replacing human methodological judgment.
+Product: A local CLI that profiles supplied data, proposes an input adapter, task and output contract, asks the user to approve important decisions, and generates a fully editable Jupyter notebook. Pipelines may combine text processing, OCR, document extraction, visual understanding, cross-modal retrieval and image generation/editing. The user executes and extends the notebook independently.
+Agreed decisions (binding): - Assisted intelligence: deterministic offline heuristics suggest task, fields, validation, and metric; human explicitly confirms material choices. No LLM dependency for inspection or configuration; selected notebook tasks may use explicitly configured local models. - Generate-only default: invoking generate may inspect metadata and write notebook/artifacts, but must not train models, execute notebook cells, or evaluate on the dataset. Executable notebooks contain the training and evaluation code. - Offline mandatory: profiling, generation, and executing all release-declared baselines must work with network access disabled, given installed dependencies. Model weights, if any, must be available locally. - Coverage: use an extensible registry of input adapters, task adapters and composed pipelines. The original seven NLP families are initial template specifications, not the product scope ceiling. The scenario catalog includes text-to-text, image-to-text, text-to-image, image-plus-text reasoning/editing, cross-modal retrieval and text-linked media pipelines. Input/output directions are explicit; OCR is one image-to-text variant, not the scope boundary. The release manifest declares the exact implemented and verified subset. - Human-owned experiments: generated notebooks are inspectable, modifiable, reproducible, and do not import the generator package at execution time.
+Product non-goals: guaranteed leaderboard performance, an autonomous ML research agent, arbitrary user-authored Python code synthesis, HPO, scraping, remote API dependency or distributed training. The scope includes text-linked image understanding, generation and editing beyond document images, plus conditional text-linked audio/video/structured-output scenarios. Pure media tasks with no text input, textual target or text-based supervision are outside this catalog unless separately specified. Local model dependencies and weights must be pre-staged, and competition-use eligibility follows the actual organizer rules. No generative model is required for inspection or configuration.
+Definition of release completion: every adapter and pipeline declared supported in the versioned release manifest passes documented positive, negative, correctness, offline and end-to-end execution tests on maintained fixtures. Catalogued scenarios are planned coverage, not evidence of working software. The manifest records planned, implemented-unverified or verified status, supported variants, input/output contracts, dependencies, weights and fixture evidence. A release is complete only against its explicitly frozen scope; omitted scenarios remain visible as planned.
+Deployment/compliance gate: the competition guidebook’s general allowance for tools does not establish permission for previously authored code, saved weights, or pre-generated notebooks. Team must obtain organizer confirmation before competitive use. Store the confirmation and rules version in the release manifest; compliance is external to software correctness.
+2. Intended users and system context
+User U1 — Experimenter: wants first valid, measurable baseline quickly; supplies data/problem statement and approves interpretation of task/metric/split. Can edit produced notebook.
+User U2 — Reviewer/presenter: needs a transparent account of target, validation, baseline, caveats, results, and artifacts. Generated notebook includes documented decisions; scores appear only after executing result cells.
+User U3 — Maintainer: adds task adapters, templates, and metric implementations without breaking other families; tests every supported fixture.
+Environment: Linux/macOS/Windows machine with a pre-provisioned Python environment and Jupyter-compatible notebook runtime. Competition hardware, internet access, and package limitations must be checked on-site. Offline support means no network operation is required, not that dependencies materialize without installation.
+Scope basis: The supplied competition wording is “Data yang akan diproses selama perlombaan berupa data teks (text-based data).” The preparation catalog covers tasks where text is an input, target, annotation, query, prompt or intermediate representation, including both directions between text and images. Text prompts can lead to image outputs; image inputs can lead to text outputs. This expanded product scope does not establish that the competition supplies or permits every modality. Record eligibility separately from implementation status, using confirmed, pending or excluded with a rules reference; keep pending scenarios in the catalog rather than removing them.
+3. Scope and supported tasks
+Initial adapter specifications: The following seven-family table retains the original baseline contracts as an initial subset. It does not limit the expanded scenario catalog. Baselines establish valid, measurable behavior rather than guaranteed competitive quality. Advanced tasks may require appropriate local pretrained models instead of a classical estimator; offline readiness must be verified.
+3.1 Machine readable text scenarios
+3.2 OCR and document image scenarios
+These scenarios apply when text-bearing images or scans are supplied and permitted. OCR may be the prediction task itself or a stage before another task. OCR correction from already extracted text is also covered without requiring image input. Recognition, detection, layout and extraction use separate annotation and output contracts.
+3.3 Input routing and composed pipelines
+A PDF is a container: use embedded text extraction for usable digital text, rendering plus OCR for scans, and page/region-specific routing for mixed PDFs. Preserve document/page identity, reading order, text provenance and coordinates where relevant. Parse DOCX, HTML, XML and Markdown using their structure. Never infer the task solely from the extension.
+Pipeline scenarios include scanned-letter classification; invoice field extraction and normalization; scanned-archive retrieval; document QA with retrieval; photographed-text translation; duplicate-document matching; handwritten-essay scoring; sensitive-information redaction with coordinate mapping; table reconstruction; and scanned-report summarization. Record each stage and evaluate the final task as well as useful intermediate diagnostics.
+3.4 Cross cutting variations and support boundaries
+Support declarations identify supervision (labeled, partially labeled, unlabeled or few-shot), languages/scripts (including Indonesian, regional languages and code-switching), data quality, prediction unit, resource budget and output representation. Task units may be characters, tokens, spans, regions, pages, documents, pairs or queries. A catalog entry does not imply support for every variant. No finite catalog guarantees every possible future competition task; new adapters extend it.
+3.5 Text and image scenario matrix
+This matrix extends the existing text, OCR and document catalog. Each direction is a separate task contract. Image-to-text includes visual interpretation as well as transcription; text-to-image includes both generative modeling and deterministic rendering. A single request may produce multiple images, regions, captions or structured artifacts.
+3.6 Text linked media and structured output extensions
+Conditional adjacent scenarios remain visible for broad preparation: speech/audio to transcript, translation or summary; text to speech; audio plus text QA/retrieval; video to captions, subtitles, descriptions or summaries; text-to-video/video editing and temporal grounding; text to code, SQL, formulas, graphs, geospatial or 3D/scene specifications; text with tabular, temporal or graph features for prediction, recommendation and matching. These are separate adapters with explicit media/structured-data contracts and acceptance fixtures, not automatic extensions of an image adapter. Text-free audio/video/3D prediction is not implied.
+3.7 Composition and coverage declaration
+Examples include image → caption → translation; image → OCR → QA; text → image → OCR spelling audit; prompt → candidate images → reranking; source image + instruction → edit → preservation audit; screenshot → structured markup; chart → data → explanation; multimodal retrieval → grounded answer; and speech → transcript → summary. Maintain a coverage matrix over input modality, output modality, task/variant, supervision, language, annotation unit, pipeline, assets, resource limits, evaluation and serializer. Register unknown tasks as requiring a new adapter; never claim that a finite scenario list implements every possible task.
+4. Assumptions, dependencies, constraints
+A-01: Candidate local inputs include CSV, JSONL, Parquet, TXT, DOCX, HTML, XML, Markdown, digital/scanned/mixed PDFs, and text-bearing PNG/JPEG/TIFF images with annotation manifests. Each release explicitly declares and tests the formats, encodings and variants it supports. Required parsers, PDF rendering tools, image codecs and dependencies must be installed offline. Unsupported variants fail clearly. Image-generation/editing inputs may also include captions/prompts, source/reference/control images, masks, paired targets and preference records. Text-linked media extensions require declared audio/video codecs or structured-data readers; no format is supported merely because it appears in the catalog.
+A-02: User knows or can obtain the competition’s task statement, target semantics, official primary metric, and submission specification. Schema heuristics cannot deduce metric requirements reliably.
+A-03: Input schemas and task targets must match a verified release adapter/pipeline. Catalogued but unavailable scenarios are rejected with an actionable status rather than silently mapped to a different task.
+A-04: Data size fits bounded profiling and the chosen selected baseline or OCR/document pipeline within allocated local memory/CPU resources. No universal training-time guarantee.
+C-01: No network/API calls by default or implicitly; offline test is mandatory. No remote code downloads or model-weight downloads.
+C-02: Generated notebook must not import the generator package; all task-specific helper functions it needs are embedded or are dependencies explicitly listed in the generated runtime requirements.
+C-03: User-controlled strings/paths/data must not be interpolated as executable Python source. Only trusted, versioned notebook templates may generate code.
+C-04: generate must be nonexecuting; notebook smoke execution is a separate maintainer command/test action requiring explicit invocation.
+C-05: Training/test separation, ID mapping, split strategy, and metric direction must be explicit and verified.
+C-06: Input data may be sensitive. System should read local files, emit local reports, and not transmit contents externally.
+5. Functional requirements (normative)
+Priority: M = Must for the declared release scope, S = Should, C = Could. Core Must requirements apply to all releases; scenario-specific requirements apply whenever that capability is declared supported. Each Must must be traceable to tests. Planned scenarios do not become implementation claims.
+5.1 Inspection and assisted configuration
+FR-001 (M) Load all release-declared formats with strict errors for missing/corrupt files, invalid encoding, unsupported variants and unreadable/encrypted documents. Never evaluate text cells as Python or execute document macros, scripts or embedded objects.
+FR-002 (M) Produce bounded profile of each configured dataset: schema/types, row/sample counts, missingness, cardinality, duplicate prevalence, text lengths, label summary where present, and potential overlap between train/test. Clearly mark sampled versus full statistics. For document/image inputs, include bounded page/image counts, dimensions, text-layer availability and annotation coverage where available; defer OCR inference to explicit notebook execution.
+FR-003 (M) Recommend candidate input adapter, task family/variant, pipeline stages and field mappings with evidence and risk flags. Recommendations are heuristics, not automatic truth.
+FR-004 (M) Emit human-editable config.draft.yaml and profile.json; support user overrides. The final configuration must specify primary metric, split, task family/variant, required data roles, and prediction contract. Include input modality, annotation schema, page/document identifiers, language/script, pipeline stages, local model assets and output serialization where applicable. Multimodal configurations also declare input/output directions, prompt/reference/mask roles, output count and dimensions, generation settings and per-sample seeds, conditioning policy and selected evaluator assets.
+FR-005 (M) Validate the task-specific schema before notebook generation (including row shape, key uniqueness where required, label encoding, and target type). Validate text offsets, token alignment, boxes/polygons, coordinate systems, page references, transcripts, tables and structured targets when applicable. Validate image-text pairing, mask dimensions/value conventions, reference/control alignment and target availability; validate time units, frame/sample rates or structured output schemas for enabled extensions.
+FR-006 (M) Block generation until review.approved: true and blocking validation issues are resolved. High-risk warnings require acknowledgement by stable warning ID.
+FR-007 (M) Support sample-submission inspection and explicit output-field mapping and serialization. If no submission format exists, generate predictions and visibly label them not competition-validated.
+5.2 Generation and output
+FR-008 (M) Generate schema-valid .ipynb via a trusted renderer and verify notebook structure without executing it.
+FR-009 (M) Populate sections: purpose/configuration, dataset audit, EDA, methodology and validation rationale, baseline, metric implementation, per-task error/diagnostic report, prediction generator, artifact export, limitations.
+FR-010 (M) Generate all code required for one appropriate, reproducible offline baseline for the selected verified adapter/pipeline, with no generator-package import. Classical estimators, deterministic extraction and local OCR/document/vision-language/image-generation/neural models are permitted according to the tested contract. Do not substitute identity or constant outputs for an unsupported capability.
+FR-011 (M) Generate deterministic preprocessing/label mappings that are fit only on allowed training data; any transductive training must require an explicit separately supported policy (not available in core V1).
+FR-012 (M) Generate selected validation strategy plus boundary audits. If evidence indicates high leakage risk, require user resolution/acknowledgement; no hidden random fallback.
+FR-013 (M) Generate metrics compatible with the configured task/target, with explicit maximization/minimization direction. Do not report placeholder values as measured results.
+FR-014 (M) Generate predictions and deterministic ordering; validate row count, IDs, shape, value domain, and submission-schema mapping where supplied. Refuse ungrounded submission formats. For non-tabular outputs, validate required JSON/JSONL structures, text spans, regions, page IDs, coordinate bounds, table structure or document artifacts against the declared contract. Image/media exports must be decodable, match declared counts/formats/dimensions/durations and map to sample IDs through a manifest; reject missing, duplicate or corrupt artifacts.
+FR-015 (M) Emit generation_report.json, runtime_requirements.txt or equivalent pinned environment specification, and a concise README.md explaining execution directory and assumptions.
+FR-016 (M) Render a notebook that can execute in a documented clean offline runtime without importing generator code or external APIs.
+5.3 Operations, transparency, and robustness
+FR-017 (M) Provide CLI commands inspect, validate, generate, list-tasks; verify (explicit execution) is a maintainer/test utility.
+FR-018 (M) Log input file hashes (or explicitly report hashing disabled due to data scale), effective config, selected baseline, seed, schema/template version, and all important warnings in generation report. For generative pipelines log prompts/template version, reference hashes, model/tokenizer/processor versions, scheduler/sampler, steps, guidance, dimensions, precision, seed and relevant backend settings; record pretraining provenance and unknown overlap limits.
+FR-019 (M) Never execute notebooks, run OCR/embedding/generation/inference, invoke training or write predictions/generated media as side effects of generate. Notebook smoke execution and model execution require their explicit commands.
+FR-020 (M) Preserve path safety and avoid overwriting existing files without an explicit --overwrite option; writes should be atomic where feasible.
+FR-021 (M) Emit machine-readable errors with stable error codes and clear human remediation.
+FR-022 (S) Offer stronger local models and optional notebook sections. Any local model, including OCR or document models required by a selected baseline, must have pre-staged dependencies/assets, explicit paths, license/provenance records and an offline preflight; no implicit download or backend fallback.
+FR-023 (S) Support explicit runtime budgets and bounded dataset subsampling for faster development experiments.
+FR-024 (S) Export presentation-ready charts and an experiment summary once notebook cells are executed (not synthesized at generate time).
+FR-025 (M) Separate input adapters, task adapters, pipeline stages, metrics and output serializers. Expose supported variants and planned/implemented-unverified/verified status through list-tasks and a versioned release manifest.
+FR-026 (M, document scope) Route digital/scanned/mixed PDFs and text-bearing images explicitly. Preserve source/document/page/region IDs, coordinate transforms, extraction method and text provenance. Generation may inspect bounded metadata or embedded text but must not run OCR/model inference.
+FR-027 (M, OCR scope) Configure detection, recognition or end-to-end OCR separately; specify languages/scripts, annotation granularity, region order, coordinate convention and Unicode/whitespace normalization for scoring.
+FR-028 (M, pipeline scope) Declare stage input/output contracts and fail on missing stages/assets. Notebook execution reports intermediate diagnostics where ground truth exists and measures end-to-end task output without using held-out labels.
+FR-029 (M) Declare limits for file bytes, pages, image pixels, rendering resolution, sequences and runtime resources. Detect over-limit inputs and fail or use explicitly configured bounded processing; never silently truncate competition predictions.
+FR-030 (M, multimodal scope) Declare modality directions and contracts for captions, visual QA, retrieval, matching, grounding, classification, synthesis, deterministic rendering, editing and conditional media/structured extensions. Missing required assets or stages must fail before generation; do not silently substitute OCR for visual understanding.
+FR-031 (M, image output scope) Configure prompt IDs, image count, output dimensions/color/format, seed policy, negative prompts and local generation backend. For editing also specify source/reference/control assets, mask semantics, coordinate transforms and preservation constraints. Save generated artifacts only during explicit notebook execution.
+FR-032 (M, evaluation scope) Bind the official evaluator where available. Otherwise label metrics as diagnostics: caption similarity, VQA accuracy, retrieval Recall@K/MRR, grounding IoU/mAP, alignment/quality, OCR spelling checks and edit-preservation checks as appropriate. Log scorer weights/versions and human rubric where used. No single proxy establishes semantic correctness or visual quality; distribution metrics require adequate sample counts and must not be claimed meaningful on tiny fixtures.
+FR-033 (M, media and structured scope) Declare timestamps/frame/sample rates, temporal alignment, graph/code/schema semantics and output serialization where applicable. Generated code/markup is output data and must not be automatically executed. Explicit execution requires its separately configured runtime.
+FR-034 (M) Record implementation status independently from competition eligibility for every scenario. Cross-modal extension remains planned until its complete raw-input-to-output pipeline passes fixtures; a catalog entry, installed model or successful intermediate stage is insufficient.
+6. Validation policy requirements
+All strategies must support explicit group_column or time_column where meaningful. Exact duplicate detection is required; semantic near-duplicate detection is a heuristic risk warning, not a guarantee. For documents and OCR, keep pages, crops and augmentations from a source document within one split; use writer, template, institution or source grouping where the task requires generalization across those boundaries. Fit OCR correction dictionaries and extraction rules only on allowed training data. Evaluate stage metrics and the final pipeline separately where possible. For multimodal data, keep captions/prompts, source images, paired targets, derived edits and augmentations grouped where they share an underlying source; hold out identities, scenes, templates or time when required. Fit retrieval indices and learned evaluators only under the declared data policy. Paired reference-image scores cannot be assumed valid for open-ended generation with many acceptable outputs.
+7. Non-functional requirements (measurable)
+NFR-001 Offline (M): Full inspect → validate → generate and every release-declared baseline/pipeline fixture execution pass with network disabled. Packaging identifies all wheel, parser, renderer, codec, language-data and model-weight assets. No runtime downloads, including during model initialization. Include vision encoders, diffusion/generation assets, schedulers, fonts, vocoders/codecs and evaluation models whenever selected; verify initialization and execution without network access.
+NFR-002 Generation speed (M): For reference small fixture (up to 10,000 rows / 10 MB, reference machine to be documented), generate completes in ≤30 s, excluding setup, inspection beyond bounded sample, and notebook execution. Measure instead of assuming. This target covers the tabular generation fixture only. Document/PDF/image metadata profiling and notebook execution require separate measured limits per declared adapter; OCR inference is excluded from generate.
+NFR-003 Notebook validity (M): Every generated notebook passes nbformat.validate and executes top-to-bottom on accepted fixtures when explicitly invoked by tests.
+NFR-004 Reproducibility (M): Same config/data/environment/seed yields logically equivalent outputs; compare deterministic signatures or floats with fixed tolerances. Log nondeterministic backend limitations; do not promise byte-identical GPU results. Record generator state and seeds per sample/batch; use tested tolerances and semantic/structural checks for stochastic outputs rather than requiring identical image bytes across backends.
+NFR-005 Input safety (M): YAML safe_load, JSON parse only; never use eval, exec on data/config content, or dynamically import paths from datasets; generated source comes from trusted templates.
+NFR-006 Operational robustness (M): Files written atomically if possible; output collision fails by default; actionable validation errors include locations/roles.
+NFR-007 Modularity (M): New input/task/pipeline adapter can be registered without editing core orchestration. Generator only depends on adapter contract, not task-specific columns, image layouts or PDF internals.
+NFR-008 Transparency (M): Notebook documents the validation rationale, warnings, metric direction, baseline configuration, data provenance, and limitations. Scores appear only after execution.
+NFR-009 Memory (M): Inspection defaults to bounded samples and does not silently load arbitrary large files in full; explicit full inspection may be user-selected. Image/media execution must declare CPU/GPU RAM/VRAM, batch size, input/output resolution, maximum duration, generation steps and time budget; report resource failure without silently switching models or dropping samples.
+NFR-010 Portability (M): Generated notebooks run from documented project_root working directory with relative dataset paths and installed runtime dependencies; no generator import.
+NFR-011 User experience (M): For valid supported data and an approved config, one generate --config command produces the package; failures produce non-zero exit and stable code.
+NFR-012 Testability (M): CI exercises all task adapters using maintained tiny/small positive, adversarial, and invalid fixtures.
+8. Core user stories and acceptance criteria
+US-01 — Rapid baseline. As a contestant, I want an unknown supported dataset profiled and a baseline notebook generated, so I can spend time on research rather than boilerplate. - AC-001: inspect produces profile.json and a provisional YAML manifest without training. - AC-002: generate rejects unapproved config; after approval emits notebook and generation report. - AC-003: Notebook executes top-to-bottom in offline fixture environment, producing task-valid predictions. - AC-004: Generated notebook contains no import gemnlp or hidden dependency on generator templates.
+US-02 — Defensible validation. As an experimenter, I need leakage-aware evaluation choices I can audit. - AC-005: Document/pair/query/group boundaries do not cross configured splits. - AC-006: Impossible stratification fails clearly; a different split is only applied after user confirmation. - AC-007: No TF-IDF/encoder fitting or threshold tuning on validation/test labels outside declared training/calibration stage.
+US-03 — Correct output. As a contestant, I need predictions shaped exactly for submission. - AC-008: Sample format enforces IDs, names, order, row count, output domain, and rank uniqueness as relevant. - AC-009: Absent submission template produces only explicitly labeled generic predictions, not falsely claimed official submission.
+US-04 — Useful failures. As a user, I need to know when the generator is uncertain or unsupported. - AC-010: Ambiguous target/task/metric leads to a proposed config and required approval, never an unexplained hardcoded choice. - AC-011: Unsupported format/task/metric fails fast with stable error code and remedy.
+8.1 Per-family acceptance tests
+AC-T01 (text_classification): Imbalanced multiclass text fixture → stratified (if feasible) split, TF-IDF + linear model, macro-F1 from independent reference, one valid class per test row. Reject single-class/impossible split without explicit alternate strategy.
+AC-T02 (text_pair): Binary relation and continuous similarity fixtures → appropriate estimator and metric, row-wise pair alignment; reused text ID across train/validation triggers group-leakage warning. Symmetry setting is honored.
+AC-T03 (clustering): Unlabeled topical corpus → valid cluster IDs and top terms; no fake supervised score. External ARI/NMI computed only when reference labels are supplied and explicitly allowed.
+AC-T04 (multilabel_classification): Zero/one/multiple labels and rare-label fixture → stable label vocabulary, valid binary/score array, correct micro/macro-F1; prohibit tuning threshold on final test set.
+AC-T05 (retrieval): Query/corpus/qrel fixture → deterministic unique ranking per query, correct Recall@K/MRR@K/nDCG@K against independently calculated toy example. Missing qrels → ranking works, evaluation unavailable warning.
+AC-T06 (seq2seq): Unicode paired transliteration fixture → predictions strings, correct CER/exact-match reference values; source/target train/test separation respected. Identity and nearest-neighbor comparisons documented as weak baselines.
+AC-T07 (token_classification): BIO-tagged token-sequence JSONL fixture → token-tag shape preserved, BIO outputs valid or transparently repaired, strict entity-F1 independently checked. Reject misaligned tokens/tags.
+The following acceptance gates are mandatory when the corresponding scenario enters the supported release scope. Each enabled variant also requires positive, invalid/adversarial, correctness, offline and end-to-end fixtures. The scenario catalog alone is not acceptance evidence.
+AC-T08 (text_regression): Numeric-target fixture produces finite predictions and independently checked configured MAE/RMSE or correlation; label encoding must not turn regression into classification.
+AC-T09 (structured_extraction): Span/relation/event/field fixture preserves offsets and IDs, emits schema-valid records and matches independently calculated task-specific extraction scores.
+AC-T10 (question_answering and generation): Evidence/target fixture preserves question/context alignment and task-specific text output. Verify configured exact-match/F1 or generation metrics independently; lexical scores do not establish factual correctness.
+AC-T11 (ocr_recognition): Printed and, if declared, handwritten/multilingual fixtures yield transcripts with independently checked CER/WER under configured normalization; no reference/test transcript enters recognition or correction fitting.
+AC-T12 (text_detection and spotting): Region fixtures preserve page IDs and coordinate transforms; boxes/polygons are valid and within bounds. Independently verify configured matching/IoU and precision/recall/F1; spotting also checks matched transcription.
+AC-T13 (document_ingestion): Digital, scanned and mixed PDF fixtures route correctly, preserve page order/provenance and avoid duplicate text. Explicit execution performs OCR only for configured stages; generate performs no OCR inference.
+AC-T14 (layout_tables_forms): Applicable fixtures verify region classes/reading order, table cells and merged structure or key-value associations against independent reference outputs and explicitly selected task metrics.
+AC-T15 (composed_pipeline): At least one fixture per declared composition executes offline from raw input to final submission. Source-document split boundaries, stage alignment and final output contract are verified; partial-stage success is not pipeline success.
+AC-T16 (remaining catalog variants): Hierarchical/ordinal labels, linking/coreference, segmentation, anomaly detection, metadata fusion, document classification, formula recognition or preprocessing each require variant-specific target/domain checks and independently verified scoring before support is declared.
+AC-T17 (captioning and visual_qa): General-scene, region and multi-image fixtures preserve image/question alignment and output schemas; independently verify metric calculations. OCR-only behavior must not satisfy a scene-caption/visual-reasoning contract.
+AC-T18 (cross_modal_retrieval and matching): Toy image/text relevance pairs produce deterministic unique rankings or valid scores in each declared direction; independently check ranking metrics and source-group isolation.
+AC-T19 (grounding): Phrase/region and optional mask fixtures validate coordinate transforms, matching and independently calculated IoU or task metric, including empty/no-match cases.
+AC-T20 (text_to_image and rendering): Explicit offline execution produces the configured number of decodable images per prompt with correct dimensions/format, stable ID mapping and logged generation settings. Deterministic text rendering checks exact content; generative semantic/quality evaluation uses declared diagnostics or official rubric and is not inferred from file validity.
+AC-T21 (image_editing and reference_generation): Source/prompt/reference/control/mask fixtures validate alignment, output identity and requested constraints; apply independently tested preservation and edit-region checks where relevant. A copied source alone cannot demonstrate edit success.
+AC-T22 (interleaved and multimodal_prediction): Mixed-input fixtures preserve ordering and artifact references, missing-modality policy and final schema; verify appropriate task metrics and end-to-end composition.
+AC-T23 (text_linked_extensions): Each declared audio, speech, video, code, graph, structured or 3D-output variant requires independent alignment/schema/metric and offline execution fixtures, resource limits and serializer tests before support is claimed.
+8.2 Adversarial/negative acceptance cases
+AC-N01 Malicious string in CSV cell or YAML string never executes as Python.
+AC-N02 Malformed JSONL/Parquet fails with location and error code.
+AC-N03 Overlapping exact duplicate train/test texts emits warning with rate; split policy is not silently rewritten.
+AC-N04 Missing local weights or dependencies causes explicit offline failure (optional model can be skipped only if explicitly configured).
+AC-N05 Incorrect sample-submission IDs/length/column order fails validation.
+AC-N06 Model metric incompatible with problem variant fails before generation.
+AC-N07 Unapproved config/high-risk warning fails before generation.
+AC-N08 Repeating generate without --overwrite fails on preexisting output, preserving original.
+AC-N09 generate does not execute any notebook cell or write predictions.
+AC-N10 Very long/high-cardinality text respects profiling sample cap and reports its limitations.
+AC-N11 Corrupt/encrypted PDFs, missing images, malformed annotations, out-of-bounds regions and misaligned page IDs fail with stable codes and actionable locations.
+AC-N12 Missing local OCR language data/weights or attempted network initialization fails offline preflight; no hidden download or unconfigured fallback.
+AC-N13 Source-document pages/crops/augmentations crossing splits are detected; configured writer/template/source boundaries are enforced.
+AC-N14 Over-limit pages/pixels/files trigger explicit refusal or configured bounded handling; prediction export never silently omits samples.
+AC-N15 A planned or implemented-unverified adapter/pipeline cannot be presented as verified or selected for the supported release path.
+AC-N16 Mismatched image-text pairs, invalid masks/control dimensions, broken artifact paths and inconsistent output counts fail with stable codes before export.
+AC-N17 Missing generation/evaluator assets, excessive resolution/steps/duration or insufficient configured resources fail explicitly; generate never creates media or starts model inference.
+AC-N18 A valid image file, copied input, similarity score or successful OCR output is not reported as proof of successful generation, editing, captioning or visual reasoning.
+AC-N19 Zero/missing references, unavailable evaluator weights and insufficient samples disable unsupported metrics with explicit status; never fabricate visual-quality scores.
+AC-N20 Text-directed code, SQL, SVG scripts or markup outputs do not execute during inspection, notebook generation or export.
+9. Requirement traceability
+10. Deferred design decisions and acceptance assumptions
+Final organizer ruling on prior software, preloaded weights, offline package provisioning; cannot be assumed granted.
+Reference hardware performance to benchmark the ≤30 s generation target.
+Official metric implementation may be outside V1 registry; before competition, either add and test a signed/whitelisted metric adapter or explicitly note that the generated notebook’s diagnostics do not match official scoring.
+Submission formats vary: each release declares tested tabular, text, region, JSON/JSONL, table or document serializers. Bind official IDs, ordering, coordinates and schema explicitly. Unavailable serializers require a new tested adapter; generic outputs are labeled not competition-validated.
+Baseline quality varies, particularly for handwriting, document QA, generation and complex layouts. Correct task support does not imply competitive quality; list language, domain, asset and hardware limitations.
+Full scenario coverage by competition date is not assumed. Freeze and test the release manifest; retain unimplemented scenarios as planned. Obtain organizer clarification on text-bearing images/scans, metadata and permitted assets before competition use.
+11. Sign-off checklist
+☒ Text, OCR, document and bidirectional text-image/multimodal scenario catalog specified; verified implementation is declared separately.
+☒ Assisted decision / human approval required.
+☒ Generate-only as default.
+☒ Offline operation required.
+☒ Acceptance gates specified for expanded adapters and composed pipelines; implementation remains test-gated.
+☐ Competition-use permission confirmed in writing.
+☐ Reference environment and baseline timings measured.
+☐ All acceptance fixtures and runtime tests passing.
+☐ Release manifest frozen with exact verified adapters, variants, pipelines, metrics and serializers.
+☐ Organizer input specification checked for scans/images and other conditional formats.
+Reviewer Notes and Change Log — Non-normative review worksheet
+Use this section to record decisions during manual review. Entries here are not approved requirements until incorporated into the numbered SRS sections.
+Review disposition:  ☐ Approved unchanged    ☐ Approved with changes    ☐ Revision required
+Reviewer: __________________________    Date: __________________________
+2026-11-05 — Version 1.1: broadened scope from seven NLP families to text-based data processing, OCR/handwriting and document understanding; added scenario catalog, input routing, composed pipelines, offline asset requirements, validation boundaries and conditional acceptance gates. No implementation or organizer permission is asserted.
+2026-11-06 — Version 1.2: added text-to-image synthesis and rendering, general image-to-text captioning, visual QA, cross-modal retrieval/matching, grounding, text-guided image editing, reference-conditioned generation and mixed outputs. Added conditional text-linked media/structured extensions, generation/export/evaluation contracts, acceptance gates and independent implementation/competition-eligibility status. Retained offline, assisted and generate-only behavior.
+Family ID
+Supported V1 formulation
+Baseline
+Evaluation / outputs
+Scope boundary
+text_classification
+One discrete label per text; binary/multiclass
+Word + character TF-IDF with LogisticRegression or LinearSVC
+Accuracy, macro-F1; class labels or configured scores
+Not generative classification
+text_pair
+Binary/multiclass relation OR continuous similarity score
+Pair text TF-IDF cosine/overlap/length features + linear classifier/regressor
+Macro-F1 or Spearman/MAE as explicitly configured
+Symmetric/directional pair relationship must be specified
+clustering
+Document clustering OR NMF topic mixture
+TF-IDF + MiniBatchKMeans / NMF
+Topic keywords and cluster IDs; silhouette on bounded sample; ARI/NMI only with labels
+No invented ground-truth accuracy
+multilabel_classification
+Zero or more labels per document
+TF-IDF + One-vs-Rest LogisticRegression
+Micro/macro-F1; fixed threshold 0.5 by default
+Label encoding explicitly configured
+retrieval
+Rank a fixed document corpus for each query
+TF-IDF cosine ranking; BM25 only as optional installed backend
+Recall@K, MRR@K, nDCG@K where qrels exist; ranked IDs
+No retrieval-augmented generation
+seq2seq
+Paired text-to-text mapping (normalization/transliteration)
+Train-only nearest-neighbor character TF-IDF mapping, plus identity comparator
+Character error rate (CER), exact match, predicted strings
+No requirement for neural seq2seq baseline; cannot handle images
+token_classification
+Token-aligned BIO named-entity/sequence tags
+Train-only lexicon baseline with BIO-safe reconstruction
+Strict entity-level precision/recall/F1
+Initial V1 assumes pretokenized input; raw-offset annotation not supported
+Scenario group
+Included variants and examples
+Output contract
+Classification
+Single-label, multilabel, hierarchical and ordinal classification; sentiment, intent, spam, language/script, authorship/style and document type.
+Labels, label sets or ordered categories
+Regression and scoring
+Essay scores, readability, ratings and other numeric targets inferred from text.
+Numeric values
+Text pairs and reuse
+Paraphrase, entailment, contradiction, semantic similarity, duplicate detection and plagiarism or passage reuse.
+Relation labels, scores or matching spans
+Retrieval and ranking
+Document search, answer selection, query-to-document and product matching.
+Ranked IDs and optional scores
+Information extraction
+Entities, attributes, aspect sentiment, relations, events, coreference and entity linking.
+Spans, tags, linked IDs or structured records
+Segmentation and parsing
+Sentence/section/topic boundaries; addresses, logs, citations and structured text; syntax where required.
+Boundaries, fields, trees or JSON
+Unsupervised analysis
+Document clustering, topic modeling and text/log anomaly detection.
+Clusters, topic mixtures or anomaly scores
+Question answering
+Extractive, generative and multi-document answers grounded in supplied passages; optional retrieval pipeline.
+Answer spans/text and configured evidence
+Summarization
+Single-document and multi-document summaries.
+Summary text
+Transformation
+Translation, transliteration, normalization, spelling/grammar correction, punctuation restoration and OCR text correction.
+Target or corrected text
+Controlled generation
+Titles, paraphrases, responses, explanations and other explicitly specified text generation.
+Generated text
+Text with metadata
+Any task using text together with permitted numeric, categorical, source or temporal fields.
+Task-specific prediction contract
+Scenario group
+Included variants and examples
+Output contract
+Recognition
+Printed text, handwriting, multilingual/mixed-script text, words/lines and scene text such as signs or packaging.
+Transcriptions
+Detection and text spotting
+Locate text regions; optionally recognize each region in an end-to-end pipeline.
+Boxes/polygons, optionally text
+Image preprocessing
+Orientation, deskew, dewarping, denoising and degraded/blurred/curved/low-resolution text handling.
+Corrected images or downstream OCR
+Layout and reading order
+Titles, paragraphs, headers, footnotes, tables and ordered blocks across columns/pages.
+Classified regions and ordered blocks
+Tables
+Recover rows, columns, merged cells and cell contents.
+Structured cells, table JSON/HTML/CSV
+Forms and key values
+Names, dates, addresses and associated fields on forms, receipts and invoices, including line items/totals.
+Key-value and line-item records
+Document image classification
+Classify text-bearing scans or pages by document type.
+Page/document labels
+Document visual QA
+Answer questions using page text and layout.
+Answers and optional evidence locations
+Formula recognition
+Recognize text-bearing mathematical expressions when included in the task.
+LaTeX or specified symbolic format
+Full document parsing
+Recover text and structure from digital, scanned or mixed multipage documents.
+Markdown, structured blocks or JSON
+Scenario
+Included variants
+Input and output
+Text to image
+Prompt-based image synthesis; single/multiple images, multilingual prompts, compositional/spatial constraints, negative prompts and variations.
+Prompt IDs → PNG/JPEG images and manifest
+Text to rendered text image
+Render supplied text as typography, posters, captions, signs, handwriting or synthetic documents; preserve exact spelling and Unicode.
+Text/layout/font specification → image
+Text to visual structure
+Generate diagrams, charts, plots, infographics, tables, layouts and vector graphics from text or structured textual specifications.
+Text/data → SVG, raster or declared source format
+Image to caption or description
+Caption photos/scenes, describe regions, provide alt text, detailed descriptions, image comparisons or grounded narratives.
+Image/region IDs → text
+Image to text or structured record
+OCR, handwriting, scene text, formulas, charts/tables, document parsing; UI/screenshot interpretation and image-to-markup/code when specified.
+Images → transcripts, fields, data, markup/code
+Image plus question to answer
+General visual QA, document/chart/table QA, counting, spatial reasoning, visual entailment, explanation and multi-image reasoning.
+Image(s) + question → answer/evidence
+Text to image retrieval
+Rank images matching a textual query, including relevant regions or pages.
+Query → ranked image/region IDs
+Image to text retrieval
+Rank captions, passages or documents matching an image.
+Image → ranked text IDs
+Text and image matching
+Pair verification, similarity scoring, alignment, contrastive representations and multimodal deduplication.
+Pairs → score, label or aligned units
+Text grounded localization
+Referring-expression comprehension, phrase grounding, open-vocabulary detection and text-guided segmentation.
+Image + phrase → boxes, masks or regions
+Image plus text classification
+Combine caption/post/image, meme text, product text/images or document content/layout for classification, regression, sentiment or relevance.
+Paired inputs → labels, values or scores
+Text guided image editing
+Instruction edits; add/remove/replace objects; style/color changes; backgrounds; inpainting/outpainting; text replacement and translation in images.
+Source + instruction + optional mask → edited image
+Reference conditioned generation
+Text plus reference images, identity/style/content cues, sketches, layouts, edges or depth controls; image-to-image variation/restoration with text conditions.
+Prompt + reference/control assets → image(s)
+Interleaved multimodal output
+Generate or analyze sequences containing both text and images; illustrated explanations, reports or multi-image stories.
+Mixed inputs → ordered text and image artifacts
+Scoring and preference
+Rank captions/images/edits, predict prompt-image alignment or quality, and choose between outputs under an explicit rubric.
+Candidates + prompt/context → score/ranking
+Family
+Default proposal
+Hardening / refusal conditions
+Text classification
+Stratified holdout if every class can be split; otherwise flag
+Duplicate/near-duplicate texts, shared documents, group/time leakage trigger warning/override; rare classes fail infeasible stratification
+Text pair
+Holdout by configured group/entity; if absent, propose row split with high-risk warning for reused texts
+If repeated texts span pairs, warn that row split may inflate scores; for high-risk tasks use connected-component grouping or an explicit field
+Multilabel
+Seeded holdout with per-label prevalence diagnostics
+Rare/absent positive labels may invalidate per-label metrics; optional iterative-stratification backend requires installed dependency and explicit selection
+Clustering
+No supervised train/validation by default; fit on allowed training corpus and transform test
+Never compute supervised accuracy without labels; limit silhouette sampling due to O(n²) costs
+Retrieval
+Rank corpus; use held-out queries and relevance judgments for evaluation
+Never split qrel rows randomly as a substitute for query-level isolation; if qrels absent, do not fabricate MRR/nDCG
+Seq2seq
+Source-disjoint or source-grouped holdout when possible
+Duplicate source/target leakage requires warnings; no target text from test used during training
+Token classification
+Document/sentence-group holdout; no split inside a sequence
+Token/tag alignment, BIO validity, and class presence must be checked
+Requirement group
+Architecture component
+Acceptance evidence
+FR-001–007
+DataReader, Profiler, ProposalEngine, ConfigValidator
+AC-001, AC-002, AC-010, AC-011, AC-N02, AC-N07
+FR-008–016, FR-025–034
+InputAdapters, TaskAdapters, PipelineAssembler, NotebookAssembler, OutputContract
+AC-003–009, AC-T01–T23, AC-N05/06/11–20
+FR-017–021
+CLI, SafeWriter, Reporter
+AC-N01, AC-N08/09, command tests
+NFR-001–012
+Offline package, integration harness, CI
+Offline matrix, deterministic re-execution, package tests
+Section / Requirement ID
+Proposed change
+Reason / evidence
+Decision / owner

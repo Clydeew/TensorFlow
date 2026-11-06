@@ -1,0 +1,8 @@
+.git
+.venv
+models
+runs
+wheelhouse
+.pytest_cache
+.ruff_cache
+__pycache__

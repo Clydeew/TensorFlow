@@ -1,0 +1,560 @@
+{
+  "version": "0.1.0",
+  "requirements_baseline": "SRS 1.2",
+  "template_sha256": "8ab2c90fb6ae1e3f3b6b9c0979b28b1393a425bc27194887ba40361a50ff38f0",
+  "tasks": [
+    {
+      "id": "text_classification",
+      "title": "Single-label text classification",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "accuracy",
+        "macro_f1"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "multilabel_classification",
+      "title": "Multiple labels per text",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "micro_f1",
+        "macro_f1"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_regression",
+      "title": "Numeric prediction from text",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "mae",
+        "rmse",
+        "spearman"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_pair",
+      "title": "Pair classification or numeric similarity",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "macro_f1",
+        "accuracy",
+        "mae",
+        "spearman"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "clustering",
+      "title": "Document clustering",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "retrieval",
+      "title": "Query-to-document ranking",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "mrr",
+        "recall_at_k",
+        "ndcg"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "seq2seq",
+      "title": "Normalization/transliteration nearest-neighbor baseline",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "cer",
+        "exact_match"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "token_classification",
+      "title": "Pretokenized BIO entity tagging",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "entity_f1"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_rendering",
+      "title": "Render exact text as an image",
+      "backend": "core",
+      "status": "verified",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [],
+      "note": "",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "ocr",
+      "title": "Printed text OCR and scanned/digital PDFs",
+      "backend": "ocr",
+      "status": "experimental",
+      "metrics": [
+        "cer",
+        "wer",
+        "none"
+      ],
+      "dependencies": [
+        "pytesseract",
+        "pypdf",
+        "pypdfium2"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "document_extraction",
+      "title": "Digital PDF, DOCX, HTML and plain text extraction",
+      "backend": "ocr",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "pypdf",
+        "docx",
+        "bs4"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "image_captioning",
+      "title": "Local image-to-caption model",
+      "backend": "vision",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "torch",
+        "transformers"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "visual_qa",
+      "title": "Local image-plus-question answer model",
+      "backend": "vision",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "torch",
+        "transformers"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_to_image",
+      "title": "Local text-to-image diffusion pipeline",
+      "backend": "diffusion",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "torch",
+        "diffusers",
+        "transformers",
+        "accelerate"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "image_editing",
+      "title": "Local instruction-based image editing",
+      "backend": "diffusion",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "torch",
+        "diffusers",
+        "transformers",
+        "accelerate"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_image_retrieval",
+      "title": "CLIP text-to-image ranking",
+      "backend": "clip",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "torch",
+        "transformers"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "image_text_retrieval",
+      "title": "CLIP image-to-text ranking",
+      "backend": "clip",
+      "status": "experimental",
+      "metrics": [
+        "none"
+      ],
+      "dependencies": [
+        "torch",
+        "transformers"
+      ],
+      "note": "Template implemented; full model/asset fixture execution not verified on this machine. Requires --experimental.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "hierarchical_classification",
+      "title": "Hierarchical/ordinal classification",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "structured_extraction",
+      "title": "Relations, events, key-value extraction, entity linking/coreference",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "question_answering",
+      "title": "Extractive/generative multi-document QA",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "summarization",
+      "title": "Abstractive/extractive summarization",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "translation",
+      "title": "Neural translation and text correction",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "anomaly_detection",
+      "title": "Text/log anomalies and authorship analysis",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "segmentation",
+      "title": "Text and topic boundary detection",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_detection",
+      "title": "Text boxes, polygons and end-to-end spotting",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "handwriting_recognition",
+      "title": "Dedicated handwriting recognition",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "layout_analysis",
+      "title": "Layout and reading order",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "table_extraction",
+      "title": "Table structure recognition",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "form_understanding",
+      "title": "Receipts/invoices/forms",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "formula_recognition",
+      "title": "Equation image to symbolic expression",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "visual_grounding",
+      "title": "Phrase localization and segmentation",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "multimodal_classification",
+      "title": "Text-plus-image classification/regression",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "image_text_matching",
+      "title": "Pair similarity and contrastive matching",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "reference_generation",
+      "title": "Reference/control-conditioned image generation",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "inpainting",
+      "title": "Masked image editing and outpainting",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "interleaved_generation",
+      "title": "Ordered mixed text/image output",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "visual_structure",
+      "title": "Text to diagrams, charts, SVG or layout",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "preference_scoring",
+      "title": "Image/caption/edit ranking under explicit rubric",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "speech_to_text",
+      "title": "Audio transcription/translation",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_to_speech",
+      "title": "Speech synthesis",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "audio_qa",
+      "title": "Text-linked audio QA/retrieval",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "video_captioning",
+      "title": "Video subtitles/captioning/summarization",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "text_to_video",
+      "title": "Text-driven video generation/editing",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "temporal_grounding",
+      "title": "Text to video time intervals",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "structured_generation",
+      "title": "Code, SQL, graphs, scene/3D specifications",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "metadata_prediction",
+      "title": "Text with tabular, temporal or graph features",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    },
+    {
+      "id": "composed_pipeline",
+      "title": "Arbitrary multi-stage contracts (requires a new tested adapter)",
+      "backend": "unavailable",
+      "status": "planned",
+      "metrics": [],
+      "dependencies": [],
+      "note": "No runnable adapter yet; generation fails explicitly.",
+      "competition_eligibility": "pending"
+    }
+  ],
+  "evidence": "tests/test_notebooks.py; tests/test_metrics_and_runtime.py; optional tests/test_optional_documents.py",
+  "not_verified": [
+    "Remote cross-platform CI",
+    "GPU model execution",
+    "Docker daemon/image execution",
+    "Full SRS scenario implementation"
+  ]
+}

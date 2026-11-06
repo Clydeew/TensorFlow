@@ -1,0 +1,24 @@
+schema_version: 1
+project_root: ..
+task: image_editing
+data:
+  test: examples/data/images.csv
+columns:
+  id: id
+  image: image
+  text: prompt
+  question: question
+metric: none
+seed: 42
+split:
+  strategy: random
+  test_size: 0.25
+params:
+  model_path: models/instruct-pix2pix
+  device: cpu
+  steps: 20
+review:
+  approved: false
+  acknowledged_warnings:
+  - EXPERIMENTAL_BACKEND
+  - NO_SUBMISSION_SPEC

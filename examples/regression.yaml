@@ -1,0 +1,21 @@
+schema_version: 1
+project_root: ..
+task: text_regression
+data:
+  train: examples/data/regression.csv
+  test: examples/data/test.csv
+columns:
+  id: id
+  text: text
+  target: label
+metric: mae
+seed: 42
+split:
+  strategy: random
+  test_size: 0.25
+params: {}
+review:
+  approved: true
+  acknowledged_warnings:
+  - RANDOM_SPLIT
+  - NO_SUBMISSION_SPEC
